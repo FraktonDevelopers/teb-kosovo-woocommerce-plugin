@@ -25,8 +25,9 @@ class TebPaymentHandler
     private $tranType = 'Auth';
     private $amount = 0;
     private $randomString;
+    private $paymentFormSubmissionMessage;
 
-    public function __construct(PaymentDetails $paymentDetails)
+    public function __construct(PaymentDetails $paymentDetails, $paymentFormSubmissionMessage)
     {
         $this->paymentDetails = $paymentDetails;
 
@@ -34,15 +35,21 @@ class TebPaymentHandler
 
         $utility = TebUtility::instance();
         $this->randomString = $utility->generateRandomString(20);
+        $this->paymentFormSubmissionMessage = $paymentFormSubmissionMessage;
     }
 
     public function showPaymentView()
     {
         $data = $this->prepareFormData();
-        $jsPart = file_get_contents(plugin_dir_url(__FILE__).DIRECTORY_SEPARATOR.'submit-js.js');
-        $jsPart = str_replace('THE_ID_OF_PAYMENT_GATEWAY',TEB_KOSOVO_GATEWAY_ID, $jsPart);
+        $viewDirPath = str_replace(DIRECTORY_SEPARATOR
+            . 'gateway', '', plugin_dir_path(__DIR__)) . DIRECTORY_SEPARATOR .'views'.DIRECTORY_SEPARATOR;
+
+        $jsPart = file_get_contents($viewDirPath.'submit-js.js');
+        $jsPart = str_replace('{THE_ID_OF_PAYMENT_GATEWAY}', TEB_KOSOVO_GATEWAY_ID, $jsPart);
+        $jsPart = str_replace('{THE_MESSAGE}', esc_js(__($this->paymentFormSubmissionMessage, TEB_KOSOVO_GATEWAY_ID)), $jsPart);
+
         wc_enqueue_js($jsPart);
-        require_once 'views/submit-form.php';
+        include $viewDirPath.'submit-form.php';
     }
 
     private function prepareFormData()

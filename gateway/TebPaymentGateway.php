@@ -75,7 +75,7 @@ class TebPaymentGateway extends WC_Payment_Gateway
             add_action('woocommerce_update_options_payment_gateways', array(&$this, 'process_admin_options'));
         }
 
-        add_action('woocommerce_api_'.TEB_KOSOVO_GATEWAY_ID, array($this, 'check_spg_response'));
+        add_action('woocommerce_api_'.TEB_KOSOVO_GATEWAY_ID, array($this, 'handleResponseCallback'));
     }
 
     private function extractOption($optionName) {
@@ -114,10 +114,25 @@ class TebPaymentGateway extends WC_Payment_Gateway
                 $this->description, $customer, $this->successNotifyUrl,
                 $this->failureNotifyUrl, home_url(), $this->storeKey, '', $refreshTime
             );
-            $paymentHandler = new TebPaymentHandler($paymentDetails);
+            $paymentHandler = new TebPaymentHandler($paymentDetails, $this->paymentThankYouMessage);
             $paymentHandler->showPaymentView();
         }catch (Exception $e){
             // non complaint exp
         }
+    }
+
+    // for payment hanling
+    public function process_payment($order_id)
+    {
+        try{
+            $order = new WC_Order($order_id);
+            return ['result' => 'success', 'redirect' => $order->get_checkout_payment_url(true)];
+        }catch (Exception $e){
+            return ['result' => false, 'redirect'=>false];
+        }
+    }
+
+    public function handleResponseCallback(){
+
     }
 }

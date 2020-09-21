@@ -2,7 +2,7 @@ if(typeof $ === 'undefined'){
     $ = jQuery;
 }
 $.blockUI({
-    message: "' . esc_js(__($this->paymentThankYouMessage, 'woocommerce')) . '",
+    message: "{THE_MESSAGE}",
     baseZ: 99999,
     overlayCSS:
         {
