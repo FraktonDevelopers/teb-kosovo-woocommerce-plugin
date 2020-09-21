@@ -44,6 +44,9 @@ class TebPaymentGateway extends WC_Payment_Gateway
         $this->method_title = 'TEB Payment Gateway for WooCommerce';
 
         $this->title = $this->extractOption('title');
+        if(empty($this->title)){
+            $this->title = "Teb Kosovo";
+        }
         $this->description = $this->extractOption('description');
         $this->storeKey = $this->extractOption('store_key', true);
         $this->clientId = $this->extractOption('client_id', true);
