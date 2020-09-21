@@ -66,7 +66,7 @@ class TebPaymentGatewayFields
 
             # teb details
             'teb_details' => array(
-                'title'       => __( 'TEB Details', 'wc_tbks' ),
+                'title'       => __( 'TEB Credentials', 'wc_tbks' ),
                 'type'        => 'title',
                 'description' => '',
             ),
@@ -85,7 +85,7 @@ class TebPaymentGatewayFields
                 'desc_tip' => true,
             ],
             'payment_submit_url' => [
-                'title' => __('Payment Submit Url', 'wc_tbks'),
+                'title' => __('Run Mode', 'wc_tbks'),
                 'type' => 'select',
                 'description' => __('The URL of TEB Service that will handle the request.', 'wc_tbks'),
                 'default' => __('', 'wc_tbks'),
