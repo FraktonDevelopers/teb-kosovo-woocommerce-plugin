@@ -28,13 +28,20 @@ if(!function_exists('init_teb_woo_plugin')){
             return; // simply stop the process here.
         }
 
-        define('TEB_PAYMENT_PROVIDER_LOADED');
+        define('TEB_PAYMENT_PROVIDER_LOADED', true);
 
         // require the WC_Payment_Gateway class for TEB Gateway.
         require_once 'utility/TebUtility.php';
-        TebUtility::instance();
-
         require_once 'gateway/TebPaymentGateway.php';
 
+        add_filter('woocommerce_payment_gateways', 'add_teb_payment_provider');
+    }
+}
+if(!function_exists('add_teb_payment_provider')){
+
+    function add_teb_payment_provider($methods)
+    {
+        $methods[] = 'TebPaymentGateway';
+        return $methods;
     }
 }
