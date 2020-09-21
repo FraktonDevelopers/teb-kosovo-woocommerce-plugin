@@ -36,6 +36,7 @@ if(!function_exists('init_teb_woo_plugin')){
         require_once 'gateway/TebPaymentGateway.php';
         require_once 'gateway/TebPaymentGatewayFields.php';
         require_once 'gateway/TebPaymentHandler.php';
+        require_once 'gateway/model/PaymentDetails.php';
 
         add_filter('woocommerce_payment_gateways', 'add_teb_payment_provider');
         add_action('woocommerce_receipt_'.TEB_KOSOVO_GATEWAY_ID, array($this, 'receipt_page'));

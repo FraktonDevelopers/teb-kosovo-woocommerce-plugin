@@ -95,6 +95,17 @@ class TebPaymentGatewayFields
                     'https://ecommerce.teb-kos.com/fim/est3Dgate' => __( 'Live Mode', 'wc_tbks' ),
                 ),
             ],
+            'currency' => [
+                'title' => __('Currency', 'wc_tbks'),
+                'type' => 'select',
+                'description' => __('Currency', 'wc_tbks'),
+                'default' => __('', 'wc_tbks'),
+                'desc_tip' => true,
+                'options'     => array(
+                    '978' => '€',
+                    '840' => '$',
+                ),
+            ],
 
             # security
             'security' => array(
@@ -137,13 +148,6 @@ class TebPaymentGatewayFields
                 'default' => __('', 'wc_tbks'),
                 'desc_tip' => true,
             ],
-
-            # UI Style
-            'ui_style' => array(
-                'title'       => __( 'UI Style', 'wc_tbks' ),
-                'type'        => 'title',
-                'description' => '',
-            ),
         ];
 
         foreach ($fields as $fieldName=>$fieldAttributes) {
