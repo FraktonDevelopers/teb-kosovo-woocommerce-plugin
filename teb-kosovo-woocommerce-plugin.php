@@ -29,13 +29,16 @@ if(!function_exists('init_teb_woo_plugin')){
         }
 
         define('TEB_PAYMENT_PROVIDER_LOADED', true);
+        define('TEB_KOSOVO_GATEWAY_ID', 'teb_kosovo_gtw');
 
         // require the WC_Payment_Gateway class for TEB Gateway.
         require_once 'utility/TebUtility.php';
         require_once 'gateway/TebPaymentGateway.php';
         require_once 'gateway/TebPaymentGatewayFields.php';
+        require_once 'gateway/TebPaymentHandler.php';
 
         add_filter('woocommerce_payment_gateways', 'add_teb_payment_provider');
+        add_action('woocommerce_receipt_'.TEB_KOSOVO_GATEWAY_ID, array($this, 'receipt_page'));
     }
 }
 if(!function_exists('add_teb_payment_provider')){

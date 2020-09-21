@@ -40,7 +40,7 @@ class TebPaymentGateway extends WC_Payment_Gateway
     {
         $this->tebUtility = TebUtility::instance();
 
-        $this->id = 'teb_kosovo_gtw';
+        $this->id = TEB_KOSOVO_GATEWAY_ID;
         $this->method_title = 'TEB Payment Gateway for WooCommerce';
 
         $this->title = $this->extractOption('title');
