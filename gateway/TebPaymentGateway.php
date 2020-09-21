@@ -114,7 +114,7 @@ class TebPaymentGateway extends WC_Payment_Gateway
                 $this->description, $customer, $this->successNotifyUrl,
                 $this->failureNotifyUrl, home_url(), $this->storeKey, '', $refreshTime
             );
-            $paymentHandler = new TebPaymentHandler($paymentDetails, $this->paymentThankYouMessage);
+            $paymentHandler = new TebPaymentHandler($paymentDetails, $this->paymentThankYouMessage, $this->paymentSubmitUrl);
             $paymentHandler->showPaymentView();
         }catch (Exception $e){
             // non complaint exp

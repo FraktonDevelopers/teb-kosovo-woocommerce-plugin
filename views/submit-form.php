@@ -1,4 +1,4 @@
-<form method="POST" action="<?php echo  '' ?>" id="submit_<?php echo TEB_KOSOVO_GATEWAY_ID ?>">
+<form method="POST" action="<?php echo  $data->paymentSubmitUrl; ?>" id="submit_<?php echo TEB_KOSOVO_GATEWAY_ID ?>">
     <div class="payment_buttons">
         <input type="hidden" name="amount" value="<?php echo  $data->amount; ?>">
         <input type="hidden" name="billTocompany" value="<?php echo  $data->billToCompany; ?>">

@@ -26,8 +26,9 @@ class TebPaymentHandler
     private $amount = 0;
     private $randomString;
     private $paymentFormSubmissionMessage;
+    private $paymentSubmitUrl;
 
-    public function __construct(PaymentDetails $paymentDetails, $paymentFormSubmissionMessage)
+    public function __construct(PaymentDetails $paymentDetails, $paymentFormSubmissionMessage, $paymentSubmitUrl)
     {
         $this->paymentDetails = $paymentDetails;
 
@@ -36,11 +37,13 @@ class TebPaymentHandler
         $utility = TebUtility::instance();
         $this->randomString = $utility->generateRandomString(20);
         $this->paymentFormSubmissionMessage = $paymentFormSubmissionMessage;
+        $this->paymentSubmitUrl = $paymentSubmitUrl;
     }
 
     public function showPaymentView()
     {
         $data = $this->prepareFormData();
+        $data->paymentSubmitUrl = $this->paymentSubmitUrl;
         $viewDirPath = str_replace(DIRECTORY_SEPARATOR
             . 'gateway', '', plugin_dir_path(__DIR__)) . DIRECTORY_SEPARATOR .'views'.DIRECTORY_SEPARATOR;
 
