@@ -18,18 +18,18 @@ class TebUtility
 
     private $ENCRYPTION_KEY = "ThisKeyShouldBeChanged888";
 
-    public static function init(){
-        if(TebUtility::$tebUtilityInstance == null){
-            TebUtility::$tebUtilityInstance = new TebUtility();
-        }
-        return TebUtility::$tebUtilityInstance;
-    }
-
     private function __construct()
     {
         if(defined("TEB_KOSOVO_ENCRYPT_KEY")){
             $this->ENCRYPTION_KEY = TEB_KOSOVO_ENCRYPT_KEY;
         }
+    }
+
+    public static function instance(){
+        if(TebUtility::$tebUtilityInstance == null){
+            TebUtility::$tebUtilityInstance = new TebUtility();
+        }
+        return TebUtility::$tebUtilityInstance;
     }
 
     public function encrypt($data)
