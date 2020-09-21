@@ -66,7 +66,7 @@ class TebPaymentGatewayFields
 
             # teb details
             'teb_details' => array(
-                'title'       => __( 'TEB Credentials', 'wc_tbks' ),
+                'title'       => __( 'TEB Credentials & Settings', 'wc_tbks' ),
                 'type'        => 'title',
                 'description' => '',
             ),
@@ -105,6 +105,13 @@ class TebPaymentGatewayFields
                     '978' => '€',
                     '840' => '$',
                 ),
+            ],
+            'refresh_time' => [
+                'title' => __('Refresh time', 'wc_tbks'),
+                'type' => 'text',
+                'description' => __('The time in seconds the TEB Payment Notification will appear after a payment is finished.', 'wc_tbks'),
+                'default' => 5,
+                'desc_tip' => true,
             ],
 
             # security

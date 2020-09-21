@@ -24,6 +24,7 @@ class TebPaymentGateway extends WC_Payment_Gateway
     private $paymentSubmitUrl;
     private $successNotifyUrl;
     private $failureNotifyUrl;
+    private $currency;
 
     // UI stuff attributes.
     private $paymentThankYouMessage;
@@ -34,7 +35,6 @@ class TebPaymentGateway extends WC_Payment_Gateway
     private $callbackKnownIps;
 
     private $tebUtility;
-    private $optionPrefix = 'tbks_';
 
     public function __construct()
     {
@@ -48,8 +48,8 @@ class TebPaymentGateway extends WC_Payment_Gateway
             $this->title = "Teb Kosovo";
         }
         $this->description = $this->extractOption('description');
-        $this->storeKey = $this->extractOption('store_key', true);
-        $this->clientId = $this->extractOption('client_id', true);
+        $this->storeKey = $this->extractOption('store_key');
+        $this->clientId = $this->extractOption('client_id');
         $this->paymentSubmitUrl = $this->extractOption('payment_submit_url');
 
         $this->companyName = $this->extractOption('company_name');
@@ -57,19 +57,29 @@ class TebPaymentGateway extends WC_Payment_Gateway
         $this->paymentFailureMessage = __($this->extractOption('payment_failure_message'), 'wc_tbks');
         $this->paymentSuccessMessage =__($this->extractOption('payment_success_message'), 'wc_tbks');
         $this->callbackKnownIps = $this->extractOption('callback_known_ips');
+        $this->currency = $this->extractOption('currency');
+        $this->successNotifyUrl = home_url('/wc-api/wc_gateway_TebPaymentGateway');
+        $this->failureNotifyUrl = home_url('/wc-api/wc_gateway_TebPaymentGateway');
 
         //register form fields for settings page
         $tebPaymentFields = TebPaymentGatewayFields::instance();
         $tebPaymentFields->prepareFields($this);
-    }
 
-    private function extractOption($optionName, $decrypt=false) {
-        $value = $this->get_option($optionName);
+        //register action to handle payments
+        add_action('woocommerce_receipt_'.TEB_KOSOVO_GATEWAY_ID, array($this, 'handlePayment'));
 
-        if($decrypt && !empty($value)){
-            $value = $this->tebUtility->decrypt($value);
+        //register action to store wp settings
+        if (version_compare(WOOCOMMERCE_VERSION, '2.0.0', '>=')) {
+            add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
+        } else {
+            add_action('woocommerce_update_options_payment_gateways', array(&$this, 'process_admin_options'));
         }
 
+        add_action('woocommerce_api_'.TEB_KOSOVO_GATEWAY_ID, array($this, 'check_spg_response'));
+    }
+
+    private function extractOption($optionName) {
+        $value = $this->get_option($optionName);
         return $value;
     }
 
@@ -80,5 +90,34 @@ class TebPaymentGateway extends WC_Payment_Gateway
         }
 
         $this->form_fields[$fieldName] = $fieldAttributes;
+    }
+
+    /*
+    * @param $orderId this is invoked from WooCommerce
+    */
+    public function handlePayment($orderId){
+        try{
+            $order = new WC_Order($orderId);
+
+            $customer = $order->get_billing_email();
+            if (empty($customer)) {
+                $customer = "Web Customer";
+            }
+
+            $refreshTime = intval($this->extractOption('refresh_time'));
+            if($refreshTime <= 0){
+                $refreshTime = 5;
+            }
+
+            $paymentDetails = new PaymentDetails(
+                $order, $this->clientId, $this->currency, $this->companyName,
+                $this->description, $customer, $this->successNotifyUrl,
+                $this->failureNotifyUrl, home_url(), $this->storeKey, '', $refreshTime
+            );
+            $paymentHandler = new TebPaymentHandler($paymentDetails);
+            $paymentHandler->showPaymentView();
+        }catch (Exception $e){
+            // non complaint exp
+        }
     }
 }

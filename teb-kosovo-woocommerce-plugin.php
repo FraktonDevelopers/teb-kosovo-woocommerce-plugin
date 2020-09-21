@@ -12,7 +12,7 @@ if (!defined('ABSPATH')){
 }
 
 //start the session if already not started
-if(!session_id()){
+if(!session_status()){
     session_start();
 }
 
@@ -39,7 +39,6 @@ if(!function_exists('init_teb_woo_plugin')){
         require_once 'gateway/model/PaymentDetails.php';
 
         add_filter('woocommerce_payment_gateways', 'add_teb_payment_provider');
-        add_action('woocommerce_receipt_'.TEB_KOSOVO_GATEWAY_ID, array($this, 'receipt_page'));
     }
 }
 if(!function_exists('add_teb_payment_provider')){
