@@ -57,11 +57,14 @@ class TebPaymentGateway extends WC_Payment_Gateway
         $this->paymentFailureMessage = __($this->extractOption('payment_failure_message'), 'wc_tbks');
         $this->paymentSuccessMessage =__($this->extractOption('payment_success_message'), 'wc_tbks');
         $this->callbackKnownIps = $this->extractOption('callback_known_ips');
+
+        //register form fields for settings page
+        $tebPaymentFields = TebPaymentGatewayFields::instance();
+        $tebPaymentFields->prepareFields($this);
     }
 
     private function extractOption($optionName, $decrypt=false) {
-        $prefixedName = $this->optionPrefix.$optionName;
-        $value = $this->get_option($prefixedName);
+        $value = $this->get_option($optionName);
 
         if($decrypt && !empty($value)){
             $value = $this->tebUtility->decrypt($value);

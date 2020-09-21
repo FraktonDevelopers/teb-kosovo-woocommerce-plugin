@@ -40,6 +40,8 @@ class TebPaymentGatewayFields
                 'label' => __('Enable Teb Payment Gateway', 'wc_tbks'),
                 'default' => 'yes'
             ],
+
+            # ui information
             'title' => [
                 'title' => __('Title', 'wc_tbks'),
                 'type' => 'text',
@@ -56,11 +58,18 @@ class TebPaymentGatewayFields
             ],
             'description' => [
                 'title' => __('Description', 'wc_tbks'),
-                'type' => 'textarea',
+                'type' => 'text',
                 'description' => __('Payment method description which the customer will see during checkout', 'wc_tbks'),
                 'default' => __('', 'wc_tbks'),
                 'desc_tip' => true,
             ],
+
+            # teb details
+            'teb_details' => array(
+                'title'       => __( 'TEB Details', 'wc_tbks' ),
+                'type'        => 'title',
+                'description' => '',
+            ),
             'client_id' => [
                 'title' => __('Client ID', 'wc_tbks'),
                 'type' => 'text',
@@ -77,11 +86,36 @@ class TebPaymentGatewayFields
             ],
             'payment_submit_url' => [
                 'title' => __('Payment Submit Url', 'wc_tbks'),
-                'type' => 'text',
+                'type' => 'select',
                 'description' => __('The URL of TEB Service that will handle the request.', 'wc_tbks'),
                 'default' => __('', 'wc_tbks'),
                 'desc_tip' => true,
+                'options'     => array(
+                    'https://entegrasyon.asseco-see.com.tr/fim/est3Dgate' => __( 'Test Mode', 'wc_tbks' ),
+                    'https://ecommerce.teb-kos.com/fim/est3Dgate' => __( 'Live Mode', 'wc_tbks' ),
+                ),
             ],
+
+            # security
+            'security' => array(
+                'title'       => __( 'Security', 'wc_tbks' ),
+                'type'        => 'title',
+                'description' => '',
+            ),
+            'callback_known_ips' => [
+                'title' => __('The list of IP\' that are allowed to call the callback urls.', 'wc_tbks'),
+                'type' => 'textarea',
+                'description' => __('Highly recommended. Get the IP list from your payment provider. Separate with , each ip.', 'wc_tbks'),
+                'default' => __('', 'wc_tbks'),
+                'desc_tip' => true,
+            ],
+
+            # responses
+            'responses' => array(
+                'title'       => __( 'Responses', 'wc_tbks' ),
+                'type'        => 'title',
+                'description' => '',
+            ),
             'payment_thank_you_message' => [
                 'title' => __('Payment Thank You Message', 'wc_tbks'),
                 'type' => 'text',
@@ -103,13 +137,13 @@ class TebPaymentGatewayFields
                 'default' => __('', 'wc_tbks'),
                 'desc_tip' => true,
             ],
-            'callback_known_ips' => [
-                'title' => __('The list of IP\' that are allowed to call the callback urls.', 'wc_tbks'),
-                'type' => 'text',
-                'description' => __('Highly recommended. Get the IP list from your payment provider. Separate with , each ip.', 'wc_tbks'),
-                'default' => __('', 'wc_tbks'),
-                'desc_tip' => true,
-            ],
+
+            # UI Style
+            'ui_style' => array(
+                'title'       => __( 'UI Style', 'wc_tbks' ),
+                'type'        => 'title',
+                'description' => '',
+            ),
         ];
 
         foreach ($fields as $fieldName=>$fieldAttributes) {

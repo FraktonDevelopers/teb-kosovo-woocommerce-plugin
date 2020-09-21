@@ -33,6 +33,7 @@ if(!function_exists('init_teb_woo_plugin')){
         // require the WC_Payment_Gateway class for TEB Gateway.
         require_once 'utility/TebUtility.php';
         require_once 'gateway/TebPaymentGateway.php';
+        require_once 'gateway/TebPaymentGatewayFields.php';
 
         add_filter('woocommerce_payment_gateways', 'add_teb_payment_provider');
     }
