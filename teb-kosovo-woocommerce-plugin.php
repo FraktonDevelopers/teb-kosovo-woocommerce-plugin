@@ -6,7 +6,6 @@ Description:       A plugin that helps the customer to setup their Teb Payment P
 Version:           1.0.0
 Author:            Edon Sekiraqa
 */;
-
 if (!defined('ABSPATH')){
     exit;
 }
@@ -40,6 +39,7 @@ if(!function_exists('init_teb_woo_plugin')){
         require_once 'gateway/TebPaymentResponseHandler.php';
 
         add_filter('woocommerce_payment_gateways', 'add_teb_payment_provider');
+        add_action('woocommerce_api_tebpaymentgateway', [TebPaymentGateway::instance(), 'handleResponseCallback']);
     }
 }
 if(!function_exists('add_teb_payment_provider')){

@@ -14,6 +14,8 @@ if(!defined('TEB_PAYMENT_PROVIDER_LOADED')){
 
 class TebPaymentGateway extends WC_Payment_Gateway
 {
+    private static $instance;
+
     // this attribute is changeable from user settings.
     public $description = "Payment Gateway for TEB Kosovo.";
 
@@ -38,6 +40,9 @@ class TebPaymentGateway extends WC_Payment_Gateway
 
     public function __construct()
     {
+        if(TebPaymentGateway::$instance == null){
+            TebPaymentGateway::$instance = $this;
+        }
         $this->tebUtility = TebUtility::instance();
 
         $this->id = TEB_KOSOVO_GATEWAY_ID;
@@ -58,24 +63,28 @@ class TebPaymentGateway extends WC_Payment_Gateway
         $this->paymentSuccessMessage =__($this->extractOption('payment_success_message'), 'wc_tbks');
         $this->callbackKnownIps = $this->extractOption('callback_known_ips');
         $this->currency = $this->extractOption('currency');
-        $this->successNotifyUrl = home_url('/wc-api/wc_gateway_TebPaymentGateway');
-        $this->failureNotifyUrl = home_url('/wc-api/wc_gateway_TebPaymentGateway');
+        $this->successNotifyUrl = home_url('/wc-api/TebPaymentGateway');
+        $this->failureNotifyUrl = home_url('/wc-api/TebPaymentGateway');
 
         //register form fields for settings page
         $tebPaymentFields = TebPaymentGatewayFields::instance();
         $tebPaymentFields->prepareFields($this);
 
         //register action to handle payments
-        add_action('woocommerce_receipt_'.TEB_KOSOVO_GATEWAY_ID, array($this, 'handlePayment'));
-
+        add_action('woocommerce_receipt_'.TEB_KOSOVO_GATEWAY_ID, [$this, 'handlePayment']);
         //register action to store wp settings
         if (version_compare(WOOCOMMERCE_VERSION, '2.0.0', '>=')) {
-            add_action('woocommerce_update_options_payment_gateways_' . $this->id, array($this, 'process_admin_options'));
+            add_action('woocommerce_update_options_payment_gateways_' . $this->id, [$this, 'process_admin_options']);
         } else {
-            add_action('woocommerce_update_options_payment_gateways', array(&$this, 'process_admin_options'));
+            add_action('woocommerce_update_options_payment_gateways', [&$this, 'process_admin_options']);
         }
+    }
 
-        add_action('woocommerce_api_wc_gateway_TebPaymentGateway', array($this, 'handleResponseCallback'));
+    public static function instance(){
+        if(TebPaymentGateway::$instance == null){
+            TebPaymentGateway::$instance = new TebPaymentGateway();
+        }
+        return TebPaymentGateway::$instance;
     }
 
     private function extractOption($optionName) {
@@ -134,7 +143,6 @@ class TebPaymentGateway extends WC_Payment_Gateway
 
     public function handleResponseCallback(){
         global $woocommerce;
-
         $tebPaymentResponseHandler = new TebPaymentResponseHandler($_POST, $this->callbackKnownIps,
             $this->paymentSuccessMessage, $this->paymentFailureMessage);
 
