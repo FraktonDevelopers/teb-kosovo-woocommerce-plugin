@@ -75,7 +75,7 @@ class TebPaymentGateway extends WC_Payment_Gateway
             add_action('woocommerce_update_options_payment_gateways', array(&$this, 'process_admin_options'));
         }
 
-        add_action('woocommerce_api_'.TEB_KOSOVO_GATEWAY_ID, array($this, 'handleResponseCallback'));
+        add_action('woocommerce_api_wc_gateway_TebPaymentGateway', array($this, 'handleResponseCallback'));
     }
 
     private function extractOption($optionName) {
@@ -121,7 +121,7 @@ class TebPaymentGateway extends WC_Payment_Gateway
         }
     }
 
-    // for payment hanling
+    // for payment handling - override super class method
     public function process_payment($order_id)
     {
         try{
@@ -133,6 +133,31 @@ class TebPaymentGateway extends WC_Payment_Gateway
     }
 
     public function handleResponseCallback(){
+        global $woocommerce;
 
+        $tebPaymentResponseHandler = new TebPaymentResponseHandler($_POST, $this->callbackKnownIps,
+            $this->paymentSuccessMessage, $this->paymentFailureMessage);
+
+        $result = $tebPaymentResponseHandler->handle();
+        $redirectUrl = get_site_url();
+
+        if($result['class'] == 'success'){
+            $woocommerce->cart->empty_cart();
+            $redirectUrl = get_site_url().'/checkout/order-received/'.$result['orderId'].'/?key='. $result['orderCartHash'];
+        }
+
+        if (function_exists('wc_add_notice')) {
+            wc_add_notice($result['message'], $result['class']);
+        } else {
+            if ($result['class'] == 'success') {
+                $woocommerce->add_message($result['message']);
+            } else {
+                $woocommerce->add_error($result['message']);
+            }
+            $woocommerce->set_messages();
+        }
+
+        header('Location: '.$redirectUrl);
+        die();
     }
 }
