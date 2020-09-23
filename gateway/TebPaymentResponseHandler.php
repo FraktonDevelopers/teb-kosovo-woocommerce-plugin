@@ -51,7 +51,7 @@ class TebPaymentResponseHandler
         try {
             $order = new WC_Order($this->postData['order']);
 
-            $transactionId = isset($_POST['TransId']) ? $_POST['TransId'] : 'no-trans-id';
+            $transactionId = isset($this->postData['TransId']) ? $this->postData['TransId'] : 'no-trans-id';
             if ($order->status != 'processing') {
                 $order->payment_complete();
                 $order->add_order_note(__('SYSTEM: Teb payment successful. Transaction: ', 'wc_tbks') . $transactionId . '<br/>');
