@@ -67,8 +67,10 @@ class TebPaymentResponseHandler
     }
 
     private function isUserIpAllowed($allowedIps=[]){
-        return count($allowedIps) == 0 ||
-            in_array($_SERVER['HTTP_REFERER'], $allowedIps) ||
-            in_array($_SERVER['REMOTE_ADDR'], $allowedIps);
+        return count($allowedIps) != 0 &&
+            (
+                in_array($_SERVER['HTTP_REFERER'], $allowedIps) ||
+                in_array($_SERVER['REMOTE_ADDR'], $allowedIps)
+            );
     }
 }

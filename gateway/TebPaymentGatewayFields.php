@@ -121,7 +121,7 @@ class TebPaymentGatewayFields
                 'description' => '',
             ),
             'callback_known_ips' => [
-                'title' => __('The list of IP\' that are allowed to call the callback urls.', 'wc_tbks'),
+                'title' => __('Whitelisted IP\'s', 'wc_tbks'),
                 'type' => 'textarea',
                 'description' => __('Highly recommended. Get the IP list from your payment provider. Separate with , each ip.', 'wc_tbks'),
                 'default' => __('', 'wc_tbks'),
@@ -135,7 +135,7 @@ class TebPaymentGatewayFields
                 'description' => '',
             ),
             'payment_thank_you_message' => [
-                'title' => __('Payment Thank You Message', 'wc_tbks'),
+                'title' => __('Payment Redirect Message', 'wc_tbks'),
                 'type' => 'text',
                 'description' => __('A short message that will be shown during form submission. Example: You will be redirected to Checkout Page of the Bank.', 'wc_tbks'),
                 'default' => __('', 'wc_tbks'),
@@ -151,7 +151,7 @@ class TebPaymentGatewayFields
             'payment_success_message' => [
                 'title' => __('Payment Success Message', 'wc_tbks'),
                 'type' => 'text',
-                'description' => __('A short message that will be shown when the payment is successful finished.', 'wc_tbks'),
+                'description' => __('A short message that will be shown when the payment is successfully finished.', 'wc_tbks'),
                 'default' => __('', 'wc_tbks'),
                 'desc_tip' => true,
             ],
