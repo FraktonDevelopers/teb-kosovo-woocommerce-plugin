@@ -52,6 +52,7 @@ class TebPaymentGateway extends WC_Payment_Gateway
         if(empty($this->title)){
             $this->title = "Teb Kosovo";
         }
+        $this->icon = plugins_url('images/e-pay-logos.png', __FILE__);
         $this->description = $this->extractOption('description');
         $this->storeKey = $this->extractOption('store_key');
         $this->clientId = $this->extractOption('client_id');
